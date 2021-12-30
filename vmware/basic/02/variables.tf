@@ -30,9 +30,19 @@ variable "vsphere_template_folder" {
   type = string
 }
 
-variable "vsphere_vm_template_name" {
+variable "library_name" {
   type = string
+  descriptipn = "Contents Library name"
 }
+
+variable "library_item_name" {
+  type = string
+  description = "ova template name"
+}
+
+# variable "vsphere_vm_template_name" {
+#   type = string
+# }
 
 variable "hostnames_ip_addresses" {
   type = map(string)

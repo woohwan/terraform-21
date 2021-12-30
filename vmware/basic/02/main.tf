@@ -27,11 +27,22 @@ data "vsphere_network" "network" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
-# Retrieve template information on vsphere
-data "vsphere_virtual_machine" "template" {
-  name = "/${var.vsphere_datacenter}/vm/${var.vsphere_template_folder}/${var.vsphere_vm_template_name}"
-  datacenter_id = data.vsphere_datacenter.dc.id
+# Contents libraray
+data "vsphere_content_library" "library" {
+  name = var.library_name
 }
+
+# library item
+data "vsphere_content_library_item" "item" {
+  name       = var.library_item_name
+  library_id = data.vsphere_content_library.library.id
+}
+
+# Retrieve template information on vsphere
+# data "vsphere_virtual_machine" "template" {
+#   name = "/${var.vsphere_datacenter}/vm/${var.vsphere_template_folder}/${var.vsphere_vm_template_name}"
+#   datacenter_id = data.vsphere_datacenter.dc.id
+# }
 
 resource "vsphere_virtual_machine" "vm" {
   for_each = var.hostnames_ip_addresses
@@ -59,7 +70,8 @@ resource "vsphere_virtual_machine" "vm" {
   }
 
   clone {
-      template_uuid = data.vsphere_virtual_machine.template.id
+      # template_uuid = data.vsphere_virtual_machine.template.id
+      template_uuid = data.vsphere_content_library_item.item.id
   }
 
   extra_config = {
