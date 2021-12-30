@@ -6,7 +6,9 @@ vsphere_datastore = "datastore1"
 vsphere_cluster = "mycluster"
 vsphere_network = "VM Network"
 vsphere_template_folder = "templates"
-vsphere_vm_template_name = "coreos"
+# vsphere_vm_template_name = "coreos"
+library_name = "rhcos"
+library_item_name = "rhcos-4.7.33"
 
 # vm info
 hostnames_ip_addresses = {
