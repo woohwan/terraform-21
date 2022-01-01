@@ -1,0 +1,13 @@
+bootstrap.ocp4-terra    300 	IN      A       172.20.0.253
+cp0.ocp4-terra          300     IN      A     	172.20.0.100
+cp1.ocp4-terra          300     IN      A     	172.20.0.101
+cp2.ocp4-terra          300     IN      A     	172.20.0.102
+w0.ocp4-terra           300     IN      A     	172.20.0.110
+w1.ocp4-terra           300     IN      A      	172.20.0.111
+
+253     300     IN      PTR     bootstrap.ocp4-terra.steve-aws.com.
+100     300     IN      PTR     cp0.ocp4-terra.steve-aws.com.
+101     300     IN      PTR     cp1.ocp4-terra.steve-aws.com.
+102     300     IN      PTR     cp2.ocp4-terra.steve-aws.com.
+110     300     IN      PTR     w0.ocp4-terra.steve-aws.com.
+111     300     IN      PTR     w1.ocp4-terra.steve-aws.com.
