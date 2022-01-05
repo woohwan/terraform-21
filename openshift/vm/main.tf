@@ -1,83 +1,61 @@
-# define vSphere
-data "vsphere_datacenter" "dc" {
-  name = var.vsphere_datacenter
+locals {
+  ignition_encoded = "data:text/plain;charset=utf-8;base64,${base64encode(var.ignition)}"
 }
 
-data "vsphere_compute_cluster" "cluster" {
-  name          = var.vsphere_cluster
-  datacenter_id = data.vsphere_datacenter.dc.id
+data "ignition_file" "hostname" {
+  
+  path = "/etc/hostname"
+  mode = "755"
+
+  content {
+    content = var.name
+  }
 }
 
-# Retrieve datastore information on vsphere
-data "vsphere_datastore" "datastore" {
-  name          = var.vsphere_datastore
-  datacenter_id = data.vsphere_datacenter.dc.id
-}
-
-# Retrieve network information on vsphere
-data "vsphere_network" "network" {
-  name          = var.vm_network
-  datacenter_id = data.vsphere_datacenter.dc.id
-}
-
-# Retrieve template information on vsphere
-# data "vsphere_virtual_machine" "template" {
-#   name = "/${var.vsphere_datacenter}/vm/${var.vsphere_template_folder}/${var.vsphere_vm_template_name}"
-#   datacenter_id = data.vsphere_datacenter.dc.id
-#  }
-
-
-# If you don't have any resource pools, put "/Resources" after cluster name
-data "vsphere_resource_pool" "resource_pool" {
-  name          = "mycluster/Resources"
-  datacenter_id = data.vsphere_datacenter.dc.id
-}
-
-# Contents libraray
-data "vsphere_content_library" "library" {
-  name = var.library_name
-}
-
-data "vsphere_content_library_item" "item" {
-  name       = var.library_item_name
-  type = "ova"
-  library_id = data.vsphere_content_library.library.id
+data "ignition_config" "vm" {
+  merge {
+    source = local.ignition_encoded
+  }
+  files = [ 
+    data.ignition_file.hostname.rendered 
+  ]
 }
 
 resource "vsphere_virtual_machine" "vm" {
-  for_each = var.hostnames_ip_addresses
 
-  name = element(split(".", each.key), 0)
-
-  resource_pool_id = data.vsphere_resource_pool.resource_pool.id
-  datastore_id     = data.vsphere_datastore.datastore.id
-  guest_id         = data.vsphere_virtual_machine.template.guest_id
-  folder           = var.folder_path
+  # varaible for vsphere setting
+  name             = var.name
+  resource_pool_id = var.resource_pool_id
+  datastore_id     = var.datastore
+  folder           = var.folder
+  guest_id         = var.guest_id
   enable_disk_uuid = true
 
+  # vm spec
   num_cpus = var.num_cpus
   memory   = var.memory
+  memory_reservation = var.memory
 
-   # set network parameter
+  # set network parameter
   network_interface {
-    network_id = data.vsphere_network.network.id
+    network_id = var.network
+    adapter_type = var.adapter_type
   }
   
   disk {
     label            = "disk0"
-    size             = 120
-    thin_provisioned = false
+    size             = var.disk_size
+    thin_provisioned = var.thin_provisioned
   }
 
   clone {
-    # template_uuid = data.vsphere_virtual_machine.template.id
-    template_uuid = data.vsphere_content_library_item.item.id
+    template_uuid = var.template
   }
 
   extra_config = {
-    "guestinfo.ignition.config.data"           = base64encode(var.ignition)
+    "guestinfo.ignition.config.data"           = base64encode(data.ignition_config.vm.rendered)
     "guestinfo.ignition.config.data.enconding" = "base64"
-    "guestinfo.afterburn.initrd.network-kargs" = "ip=${each.value}::${cidrhost(var.machine_cider, 1)}:${cidrnetmask(var.machine_cider)}:${element(split(".", each.key), 0)}:ens192:none:${join(":", var.dns_addresses)}"
+    "guestinfo.afterburn.initrd.network-kargs" = "ip=${var.ipv4_address}::${var.gateway}:${var.netmask}:${var.name}:ens192:none:${var.dns_address}"
   }
 
 }
