@@ -27,6 +27,11 @@ data "vsphere_datacenter" "dc" {
   name = yamldecode(file("./config/ocp/vsphere.yaml"))["vsphere-dc"]
 }
 
+data "vsphere_resource_pool" "pool" {
+  name          = "mycluster/Resources"
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
 data "vsphere_compute_cluster" "cluster" {
   name          = yamldecode(file("./config/ocp/vsphere.yaml"))["vsphere-cluster"]
   datacenter_id = data.vsphere_datacenter.dc.id

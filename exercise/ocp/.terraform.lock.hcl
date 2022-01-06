@@ -10,9 +10,8 @@ provider "registry.terraform.io/community-terraform-providers/ignition" {
 }
 
 provider "registry.terraform.io/hashicorp/vsphere" {
-  version     = "1.26.0"
-  constraints = "1.26.0"
+  version = "2.0.2"
   hashes = [
-    "h1:7ZdLa+zdV6KGOZ5VxVLRmPyGz27DwpCFZy6w0Vegy/s=",
+    "h1:/9qlE9Ni7mhl3cTHLhmYg1AFuyBnXqie53Q5Ujor6oU=",
   ]
 }

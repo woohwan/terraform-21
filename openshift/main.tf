@@ -9,12 +9,12 @@ module "bootstrap" {
   name      = "${var.cluster_slug}-bootstrap"
   folder    = var.vmware_folder
   datastore = data.vsphere_datastore.datastore.id
-  disk_size = 40
+  disk_size = 120
   memory    = 8192
   num_cpus  = 4
   ignition  = file(var.bootstrap_ignition_path)
 
-  resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
+  resource_pool_id = data.vsphere_resource_pool.pool.id
   guest_id         = data.vsphere_virtual_machine.template.guest_id
   template         = data.vsphere_virtual_machine.template.id
   thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned

@@ -8,7 +8,7 @@ data "ignition_file" "hostname" {
   mode = "755"
 
   content {
-    content = var.name
+    content = "bootstrap.ocp4-terra.steve-aws.com"
   }
 }
 
@@ -30,6 +30,9 @@ resource "vsphere_virtual_machine" "vm" {
   folder           = var.folder
   guest_id         = var.guest_id
   enable_disk_uuid = true
+
+  wait_for_guest_net_timeout  = "0"
+  wait_for_guest_net_routable = "false"
 
   # vm spec
   num_cpus = var.num_cpus
@@ -55,7 +58,7 @@ resource "vsphere_virtual_machine" "vm" {
   extra_config = {
     "guestinfo.ignition.config.data"           = base64encode(data.ignition_config.vm.rendered)
     "guestinfo.ignition.config.data.enconding" = "base64"
-    "guestinfo.afterburn.initrd.network-kargs" = "ip=${var.ipv4_address}::${var.gateway}:${var.netmask}:${var.name}:ens192:none:${var.dns_address}"
+    "guestinfo.afterburn.initrd.network-kargs" = "ip=${var.ipv4_address}::${var.gateway}:${var.netmask}:bootstrap.ocp4-terra.steve-aws.com:ens192:none:${var.dns_address}"
   }
 
 }

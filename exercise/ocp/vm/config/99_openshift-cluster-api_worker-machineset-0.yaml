@@ -1,0 +1,50 @@
+apiVersion: machine.openshift.io/v1beta1
+kind: MachineSet
+metadata:
+  creationTimestamp: null
+  labels:
+    machine.openshift.io/cluster-api-cluster: ocp4-terra-kr57r
+  name: ocp4-terra-kr57r-worker
+  namespace: openshift-machine-api
+spec:
+  replicas: 0
+  selector:
+    matchLabels:
+      machine.openshift.io/cluster-api-cluster: ocp4-terra-kr57r
+      machine.openshift.io/cluster-api-machineset: ocp4-terra-kr57r-worker
+  template:
+    metadata:
+      labels:
+        machine.openshift.io/cluster-api-cluster: ocp4-terra-kr57r
+        machine.openshift.io/cluster-api-machine-role: worker
+        machine.openshift.io/cluster-api-machine-type: worker
+        machine.openshift.io/cluster-api-machineset: ocp4-terra-kr57r-worker
+    spec:
+      metadata: {}
+      providerSpec:
+        value:
+          apiVersion: vsphereprovider.openshift.io/v1beta1
+          credentialsSecret:
+            name: vsphere-cloud-credentials
+          diskGiB: 120
+          kind: VSphereMachineProviderSpec
+          memoryMiB: 8192
+          metadata:
+            creationTimestamp: null
+          network:
+            devices:
+            - networkName: ""
+          numCPUs: 2
+          numCoresPerSocket: 1
+          snapshot: ""
+          template: ocp4-terra-kr57r-rhcos
+          userDataSecret:
+            name: worker-user-data
+          workspace:
+            datacenter: Datacenter
+            datastore: datastore1
+            folder: /Datacenter/vm/ocp4-terra
+            resourcePool: /Datacenter/host//Resources
+            server: vcsa.saltware.lab
+status:
+  replicas: 0
