@@ -1,0 +1,3 @@
+time="2022-01-07T13:04:52+09:00" level=debug msg="OpenShift Installer 4.7.40"
+time="2022-01-07T13:04:52+09:00" level=debug msg="Built from commit 36de50c810d78eb64e20ad99920f3b2c922f2e7c"
+time="2022-01-07T13:04:52+09:00" level=fatal msg="loading kubeconfig: stat auth/kubeconfig: no such file or directory"
