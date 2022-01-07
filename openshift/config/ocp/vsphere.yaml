@@ -1,5 +1,0 @@
-vsphere-user: administrator@vsphere.local
-vsphere-password: "whSY*0805*"
-vsphere-server: vcsa.saltware.lab
-vsphere-dc: Datacenter
-vsphere-cluster: mycluster
