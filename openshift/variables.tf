@@ -43,6 +43,11 @@ data "vsphere_datastore" "datastore" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+data "vsphere_virtual_machine" "template" {
+  name          = "coreos"
+  datacenter_id = "${data.vsphere_datacenter.dc.id}"
+}
+
 # Retrieve network information on vsphere
 data "vsphere_network" "network" {
   name          = "VM Network"
@@ -51,10 +56,6 @@ data "vsphere_network" "network" {
 
 ###############
 ## Ignition
-
-provider "ignition" {
-
-}
 
 variable "ignition" {
   type    = string
@@ -69,10 +70,20 @@ variable "bootstrap_ignition_path" {
   default = ""
 }
 
+# variable "control_plane_ignition_path" {
+#   type    = string
+#   default = ""
+# }
+
 variable "bootstrap_ip" {
   type    = string
   default = ""
 }
+
+# variable "control_plane_ips" {
+#   type = list(string)
+#   default = [ ]
+# }
 
 variable "cluster_domain" {
   type = string

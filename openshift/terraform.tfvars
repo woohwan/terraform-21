@@ -1,6 +1,6 @@
 ## Node IPs
 bootstrap_ip = "172.20.0.253"
-
+# control_plane_ips = [ "172.20.0.100", "172.20.0.101", "172.20.0.102" ]
 ## Cluster configuration
 vmware_folder  = "ocp4-terra"
 rhcos_template = "coreos"
@@ -15,4 +15,5 @@ local_dns  = "172.20.2.230"
 gateway    = "172.20.0.1"
 
 ## Ignition paths
-bootstrap_ignition_path = "./ocp4-terra/bootstrap.ign"
+bootstrap_ignition_path         = "./ocp4-terra/bootstrap.ign"
+# control_plane_ignition_path     = "./ocp4-terra/master.ign"

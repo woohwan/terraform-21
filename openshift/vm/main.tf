@@ -8,7 +8,7 @@ data "ignition_file" "hostname" {
   mode = "755"
 
   content {
-    content = "bootstrap.ocp4-terra.steve-aws.com"
+    content = "${var.name}"
   }
 }
 
@@ -58,7 +58,7 @@ resource "vsphere_virtual_machine" "vm" {
   extra_config = {
     "guestinfo.ignition.config.data"           = base64encode(data.ignition_config.vm.rendered)
     "guestinfo.ignition.config.data.enconding" = "base64"
-    "guestinfo.afterburn.initrd.network-kargs" = "ip=${var.ipv4_address}::${var.gateway}:${var.netmask}:bootstrap.ocp4-terra.steve-aws.com:ens192:none:${var.dns_address}"
+    "guestinfo.afterburn.initrd.network-kargs" = "ip=${var.ipv4_address}::${var.gateway}:${var.netmask}:bootstrap.ocp4-terra.steve-aws.com::none:${var.dns_address}"
   }
 
 }

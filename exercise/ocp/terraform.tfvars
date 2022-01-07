@@ -1,2 +1,2 @@
-folder = "ocp4-terra"
+folder                  = "ocp4-terra"
 bootstrap_ignition_path = "./vm/ocp4-terra/bootstrap.ign"
